@@ -90,6 +90,10 @@ export default function App() {
 
     return (
         <div className="App">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Connect 4</title>
+            </Helmet>
             <h1>Connect 4</h1>
             <BoardContext.Provider value={playerPositions}>
                 <MutateBoardContext.Provider value={mutatePositions}>
