@@ -120,7 +120,14 @@ const StateDisplay = () => {
     const whoseTurn = useContext(WhoseTurnContext);
     return (
         <div className="StateDisplay" style={{ width: "100%" }}>
-            <h2>It's {whoseTurn}'s turn now!</h2>
+            <h2>
+                It's
+                {Object.keys(Board).map((p) => (
+                    <span className={"player " + (p == whoseTurn ? p : "")}>{p}'s</span>
+                ))}
+                turn now!
+            </h2>
+
             {/* <h2>Current State</h2>
             {JSON.stringify(Board, null, 2)} */}
         </div>

@@ -19,9 +19,6 @@ body {
     position: relative;
 }
 
-span {
-    display: block;
-}
 .tile {
     height: 4rem;
     width: 4rem;
@@ -47,4 +44,14 @@ span {
 }
 .player2 {
     background: yellow;
+}
+.player {
+    margin: 0 0.3rem;
+    color: #ddd;
+    padding: 0.2rem;
+}
+.player.player1,
+.player.player2 {
+    box-shadow: 0 0 0.15rem 0.15rem #ddd;
+    color: black;
 }
