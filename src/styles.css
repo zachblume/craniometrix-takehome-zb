@@ -65,3 +65,8 @@ body {
     box-shadow: 0 0 0.15rem 0.15rem #ddd;
     color: black;
 }
+
+.tile:not(.player1):not(.player2):hover {
+    background: #ccc !important;
+    cursor: pointer;
+}

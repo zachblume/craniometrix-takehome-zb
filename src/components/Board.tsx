@@ -2,6 +2,7 @@ import React, { FC } from "react";
 
 import hash2DPositionTo1d from "../lib/hash2DPositionTo1d";
 import Tile from "./Tile";
+import { motion } from "framer-motion";
 
 interface BoardProps {
     playerPositions: Players;
@@ -9,7 +10,16 @@ interface BoardProps {
 }
 
 const Board: FC<BoardProps> = ({ playerPositions, disabled = false }) => (
-    <div className={"board" + (disabled ? " disabled" : "")}>
+    <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+            duration: 4,
+            delay: 0,
+            ease: [0, 0.71, 0.2, 1.01],
+        }}
+        className={"board" + (disabled ? " disabled" : "")}
+    >
         {Array(6)
             .fill(null)
             .map((_, row) => (
@@ -23,7 +33,7 @@ const Board: FC<BoardProps> = ({ playerPositions, disabled = false }) => (
                         ))}
                 </div>
             ))}
-    </div>
+    </motion.div>
 );
 
 export default Board;

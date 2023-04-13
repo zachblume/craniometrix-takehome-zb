@@ -3,6 +3,7 @@ import React, { FC, useContext } from "react";
 import { MutateBoardContext, BoardContext, WhoseTurnContext } from "../App";
 import hash2DPositionTo1d from "../lib/hash2DPositionTo1d";
 import unHashPosition from "../lib/unHashPosition";
+import { motion } from "framer-motion";
 
 const Tile = ({
     row,
@@ -41,7 +42,7 @@ const Tile = ({
     const nextRowToFill = 5 - rowsInThisColumn?.length;
 
     return (
-        <span
+        <motion.span
             className={"tile " + who}
             onClick={() => {
                 if (disabled) return;
@@ -57,7 +58,7 @@ const Tile = ({
             }}
         >
             <span className="tile-inner"></span>
-        </span>
+        </motion.span>
     );
 };
 
