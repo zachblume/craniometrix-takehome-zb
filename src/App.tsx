@@ -121,8 +121,8 @@ const StateDisplay = () => {
     return (
         <div className="StateDisplay" style={{ width: "100%" }}>
             <h2>It's {whoseTurn}'s turn now!</h2>
-            <h2>Current State</h2>
-            {JSON.stringify(Board, null, 2)}
+            {/* <h2>Current State</h2>
+            {JSON.stringify(Board, null, 2)} */}
         </div>
     );
 };

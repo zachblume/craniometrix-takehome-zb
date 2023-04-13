@@ -56,7 +56,7 @@ const Tile = ({
                 });
             }}
         >
-            <span className="tile-inner">{rowsInThisColumn?.length}</span>
+            <span className="tile-inner"></span>
         </span>
     );
 };
