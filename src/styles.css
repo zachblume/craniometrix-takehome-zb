@@ -3,6 +3,7 @@ body * {
 }
 
 body {
+    background: white;
     line-height: 1.5;
     font-family: Inter;
     -webkit-font-smoothing: antialiased;
@@ -24,7 +25,7 @@ body {
     width: 4rem;
     display: block;
     font-size: 1rem;
-    border: 1px solid black;
+    border: 0px solid #eee;
     /* vertically align any children elements */
     display: flex;
     justify-content: center;
@@ -39,11 +40,20 @@ body {
 .disabled > * > * {
     background: grey;
 }
+.row .column {
+    background: blue;
+    padding: 1px;
+}
+.row .column .tile {
+    background: #eee;
+    border-radius: 100%;
+}
+
 .player1 {
-    background: red;
+    background: red !important;
 }
 .player2 {
-    background: yellow;
+    background: yellow !important;
 }
 .player {
     margin: 0 0.3rem;
