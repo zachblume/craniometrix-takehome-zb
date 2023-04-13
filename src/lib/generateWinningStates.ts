@@ -1,5 +1,7 @@
-const generateWinningStates = () => {
-    // initialize winningStates correctly
+// what type does the function return?
+// what type does the function take in?
+// answer:
+const generateWinningStates = (): Positions[] => {
     const winningStates = [];
     for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 7; j++) {

@@ -30,7 +30,6 @@ import Button from "./components/Button";
 
 // Library
 import generateWinningStates from "./lib/generateWinningStates";
-import isWinner from "./lib/isWinner";
 import whosTheWinner from "./lib/whosTheWinner";
 import checkForStalemate from "./lib/checkForStalemate";
 
@@ -47,7 +46,6 @@ const reducerForPlayerPositions = (state: Players, action: DispatchAction) => {
                 ...state,
                 [action.player]: [...state[action.player], action.position],
             };
-
         case "clear":
             return emptyBoardState;
         default:

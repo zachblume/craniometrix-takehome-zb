@@ -1,4 +1,8 @@
-const checkForStalemate = (playerPositions: Positions): Boolean => {
-    return playerPositions.reduce((accumulator, player) => accumulator + player.length) === 42;
+const checkForStalemate = (playerPositions: Players): Boolean => {
+    let count = 0;
+    for (let player of Object.values(playerPositions)) {
+        count += player.length;
+    }
+    return count === 42;
 };
-export default isStalemate;
+export default checkForStalemate;

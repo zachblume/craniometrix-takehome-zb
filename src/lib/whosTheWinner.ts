@@ -1,4 +1,5 @@
-const whosTheWinner = ({ playerPositions, winningStates }) => {
+import isWinner from "./isWinner";
+const whosTheWinner = (playerPositions: Positions, winningStates: Positions): string | boolean => {
     for (let player of playersPositions) {
         if (isWinner(player)) return player;
     }

@@ -1,4 +1,5 @@
-const isWinner = (stateOfPositionsToCheckForWin: Position[]) => {
+// isWinnerProps type
+const isWinner = (stateOfPositionsToCheckForWin: Positions, winningStates: Positions[]) => {
     for (let winningState of winningStates) {
         for (let necessaryPosition of winningState) {
             if (!stateOfPositionsToCheckForWin[necessaryPosition]) {
