@@ -19,19 +19,6 @@ body {
     position: relative;
 }
 
-.tile {
-    height: 6vw;
-    width: 6vw;
-    display: inline-block;
-    font-size: 5px;
-}
-
-.tile-inner {
-    border: 1px solid black;
-    display: block;
-    padding: 2rem;
-}
-
 .player1 {
     background: red;
 }
@@ -41,6 +28,17 @@ body {
 
 span {
     display: block;
+}
+.tile {
+    height: 4rem;
+    width: 4rem;
+    display: block;
+    font-size: 1rem;
+    border: 1px solid black;
+    /* vertically align any children elements */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .row {
     flex: auto;

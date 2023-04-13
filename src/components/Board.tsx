@@ -10,11 +10,11 @@ interface BoardProps {
 
 const Board: FC<BoardProps> = ({ playerPositions }) => (
     <div className="board">
-        {Array(7)
+        {Array(6)
             .fill(null)
             .map((_, row) => (
                 <div className="row" key={row}>
-                    {Array(6)
+                    {Array(7)
                         .fill(null)
                         .map((i, column) => (
                             <span className="column" key={column}>

@@ -30,7 +30,7 @@ const Tile: FC<Position> = ({ row, column }) => {
                 });
             }}
         >
-            <span className="tile-inner">{who || " "}</span>
+            <span className="tile-inner">{who || "d "}</span>
         </span>
     );
 };
