@@ -59,6 +59,7 @@ const reducerForPlayerPositions = (switchPlayer: Function) => {
                 newState[action.player][hash2DPositionTo1d(action.position)] = true;
                 return newState;
             case "clear":
+                switchPlayer();
                 return deepCopy(emptyBoardState);
         }
     };
