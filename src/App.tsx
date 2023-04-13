@@ -94,7 +94,7 @@ export default function App() {
                         <Board playerPositions={playerPositions} disabled={disabled} />
                         {isGameOver && (
                             <div className="game-over">
-                                {winner && <h2>{winner} won!</h2>}
+                                {winner && <h2 className={winner.toString()}>{winner} won!</h2>}
                                 <Button
                                     label="Restart game"
                                     onClick={() => {
@@ -107,7 +107,7 @@ export default function App() {
                                 />
                             </div>
                         )}
-                        <StateDisplay />
+                        {!isGameOver && <WhoseTurnDisplay />}
                     </WhoseTurnContext.Provider>
                 </MutateBoardContext.Provider>
             </BoardContext.Provider>
@@ -115,11 +115,11 @@ export default function App() {
     );
 }
 
-const StateDisplay = () => {
+const WhoseTurnDisplay = () => {
     const Board = useContext(BoardContext);
     const whoseTurn = useContext(WhoseTurnContext);
     return (
-        <div className="StateDisplay" style={{ width: "100%" }}>
+        <div className="WhoseTurnDisplay">
             <h2>
                 It's
                 {Object.keys(Board).map((p) => (
@@ -127,9 +127,6 @@ const StateDisplay = () => {
                 ))}
                 turn now!
             </h2>
-
-            {/* <h2>Current State</h2>
-            {JSON.stringify(Board, null, 2)} */}
         </div>
     );
 };
