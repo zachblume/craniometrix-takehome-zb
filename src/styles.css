@@ -1,3 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+html {
+    height: 100%;
+    width: 100%;
+    border-top: 1rem solid #0000dd;
+    color: #0000dd;
+}
+
+h1 {
+    font-size: 4rem;
+    line-height: 1rem;
+    font-family: "Press Start 2P", cursive;
+}
+
+html,
+body,
 body * {
     box-sizing: border-box !important;
 }
@@ -8,6 +25,9 @@ body {
     font-family: Inter;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    padding: 0;
+    padding-top: 3rem;
 }
 
 .App {
@@ -83,4 +103,8 @@ button {
     border-radius: 1rem;
     box-shadow: none;
     font-weight: bold;
+}
+
+.WhoseTurnDisplay {
+    font-size: 1.5rem;
 }
