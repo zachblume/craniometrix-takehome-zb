@@ -1,11 +1,10 @@
 import React, { FC } from "react";
 
 interface BoardProps {
-    redPositions: Positions;
-    yellowPositions: Positions;
+    playerPositions: Players;
 }
 
-const Board: FC<BoardProps> = ({ redPositions, yellowPositions }) => {
+const Board: FC<BoardProps> = ({ playerPositions }) => {
     return <>Board</>;
 };
 

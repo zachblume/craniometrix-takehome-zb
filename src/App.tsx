@@ -1,6 +1,5 @@
 /*
-  Here's my approach.
-
+  
   I'm going to use a global object to store the position state of the players, with playerName as key.
   Storing each player's state seperately abstracts away the complexity of 3 states as options:
          ex. [no-one, p1, p2] as possible states
@@ -14,66 +13,57 @@
    - to check if there's a stalemate.
    - to check if the game is over.
 
-  In the meantime that the initial UI is rendering, I'll calculate all the winning states
-  asynchronously and store them as an array.
+  Before UI rendering, I'll calculate all the winning states and store them as an array.
 
   To figure out if the each player is in a winning state, I'll check if the player's positions
   are present in the winning state array (by iterating through the winning array).
+
 */
 
 import "./styles.css";
+
+import { useReducer } from "react";
+
+// Components
 import Board from "./components/Board";
 import Button from "./components/Button";
-import Tile from "./components/Tile";
 
-import { useMemo, useReducer } from "react";
+// Library
+import generateWinningStates from "./lib/generateWinningStates";
+import isWinner from "./lib/isWinner";
+import whosTheWinner from "./lib/whosTheWinner";
+import checkForStalemate from "./lib/checkForStalemate";
 
-const winningStates = [];
-
-const generateWinningStates = () => {
-    for (let i = 0; i < 6; i++) {
-        for (let j = 0; j < 7; j++) {
-            const horizontal = [],
-                vertical = [],
-                diagonal = [],
-                diagonal2 = [];
-            for (let k = 0; k < 4; k++) {
-                horizontal.push({ row: i, column: j + k });
-                vertical.push({ row: i + k, column: j });
-                diagonal.push({ row: i + k, column: j + k });
-                diagonal2.push({ row: i + k, column: j - k });
-            }
-            winningStates.push(horizontal, vertical, diagonal, diagonal2);
-        }
-    }
+const winningStates = generateWinningStates();
+const emptyBoardState = {
+    player1: [],
+    player2: [],
 };
 
-const isWinner = (positions: Position[]) => {
-    let columnVerticalSum = [];
-    let rowHorizontalSum = [];
-    let diagonalSums = [];
+const reducerForPlayerPositions = (state: Players, action: DispatchAction) => {
+    switch (action.actionType) {
+        case "add":
+            return {
+                ...state,
+                [action.player]: [...state[action.player], action.position],
+            };
 
-    for (let position of positions) {
+        case "clear":
+            return emptyBoardState;
+        default:
+            return emptyBoardState;
     }
-
-    return false;
-};
-
-const whosTheWinner = () => {
-    for (let player of playersPositions) {
-        if (isWinner(player)) return player;
-    }
-    return false;
-};
-
-const isStalemate = (playerPositions) => {
-    return playerPositions.reduce((accumulator, player) => accumulator + player.length) === 42;
 };
 
 export default function App() {
-    const [playerPositions, mutatePositions] = useReducer<Players>([]);
-    const winner = whosTheWinner(playerPositions);
-    const stalemate = isStalemate(playerPositions);
+    const [playerPositions, mutatePositions] = useReducer(reducerForPlayerPositions, {
+        player1: [],
+        player2: [],
+    });
+
+    const winner = whosTheWinner({ playerPositions, winningStates });
+    const isStalemate = checkForStalemate(playerPositions);
+    const isGameOver = winner || isStalemate;
 
     return (
         <div className="App">
