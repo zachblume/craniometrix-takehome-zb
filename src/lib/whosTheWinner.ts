@@ -3,11 +3,11 @@ const whosTheWinner = ({
     playerPositions,
     winningStates,
 }: {
-    playerPositions: Positions;
-    winningStates: Positions;
+    playerPositions: Players;
+    winningStates: Positions[];
 }): string | boolean => {
-    for (let player of playersPositions) {
-        if (isWinner(player)) return player;
+    for (let [playerName, playerState] of Object.entries(playerPositions)) {
+        if (isWinner(playerState, winningStates)) return playerName;
     }
     return false;
 };

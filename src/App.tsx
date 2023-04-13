@@ -22,7 +22,7 @@
 
 import "./styles.css";
 
-import { useReducer } from "react";
+import { useReducer, createContext, useContext } from "react";
 
 // Components
 import Board from "./components/Board";
@@ -39,39 +39,79 @@ const emptyBoardState = {
     player2: [],
 };
 
+// assign the type of Players to BoardContextType
+type BoardContextType = Players | Function;
+// assign the type of DispatchAction to MutateBoardContextType
+type MutateBoardContextType = React.Dispatch<DispatchAction> | Function;
+export const BoardContext = createContext<BoardContextType>(() => {});
+export const MutateBoardContext = createContext<MutateBoardContextType>(() => {});
+
+import hash2DPositionTo1d from "./lib/hash2DPositionTo1d";
+
+const deepCopy = (obj: any): any => JSON.parse(JSON.stringify(obj));
+
 const reducerForPlayerPositions = (state: Players, action: DispatchAction) => {
     switch (action.actionType) {
         case "add":
-            return {
-                ...state,
-                [action.player]: [...state[action.player], action.position],
-            };
+            const newState = { ...state };
+            newState[action.player][hash2DPositionTo1d(action.position)] = true;
+            return newState;
         case "clear":
-            return emptyBoardState;
-        default:
-            return emptyBoardState;
+            return deepCopy(emptyBoardState);
     }
 };
 
 export default function App() {
-    const [playerPositions, mutatePositions] = useReducer(reducerForPlayerPositions, {
-        player1: [],
-        player2: [],
-    });
+    const [playerPositions, mutatePositions] = useReducer(
+        reducerForPlayerPositions,
+        deepCopy(emptyBoardState)
+    );
 
-    const winner = whosTheWinner({ playerPositions, winningStates });
+    const winner = whosTheWinner({
+        playerPositions,
+        winningStates,
+    });
     const isStalemate = checkForStalemate(playerPositions);
     const isGameOver = winner || isStalemate;
+    const disabled = !!isGameOver;
+
+    // Export playerPositions, disabled, and mutatePositions as contexts
+    // to be used by the board and tile components:
 
     return (
         <div className="App">
             <h1>Connect 4</h1>
-            <Board playerPositions={playerPositions} disabled={!!isGameOver} />
-            {isGameOver && (
-                <div className="game-over">
-                    <Button label="Restart game" onClick={() => {}} />
-                </div>
-            )}
+            <BoardContext.Provider value={playerPositions}>
+                <MutateBoardContext.Provider value={mutatePositions}>
+                    <Board playerPositions={playerPositions} disabled={disabled} />
+                    {isGameOver && (
+                        <div className="game-over">
+                            <Button
+                                label="Restart game"
+                                onClick={() => {
+                                    mutatePositions({
+                                        actionType: "clear",
+                                        player: "",
+                                        position: { row: 0, column: 0 },
+                                    });
+                                }}
+                            />
+                        </div>
+                    )}
+                    <StateDisplay />
+                </MutateBoardContext.Provider>
+            </BoardContext.Provider>
         </div>
     );
 }
+
+const StateDisplay = () => {
+    const Board = useContext(BoardContext);
+    // return <div>History</div>;
+    return (
+        <div className="StateDisplay" style={{ width: "100%" }}>
+            <h2>Current State</h2>
+            {JSON.stringify(Board, null, 2)}
+        </div>
+    );
+};

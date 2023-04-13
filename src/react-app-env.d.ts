@@ -1,5 +1,6 @@
 /// <reference types="react-scripts" />
 
+// Players is an object containing many players with their name as key and a HashOfPositions as value
 type Players = {
     [key: string]: HashOfPositions;
 };

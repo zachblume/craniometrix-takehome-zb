@@ -1,4 +1,30 @@
+body * {
+    box-sizing: border-box !important;
+    display: block;
+}
+
 .App {
     font-family: sans-serif;
     text-align: center;
+}
+
+.board {
+    margin: auto;
+}
+.row {
+}
+.column {
+    height: 100%;
+    display: inline-block;
+}
+
+.tile {
+    height: 100%;
+    display: inline-block;
+}
+
+.tile-inner {
+    padding: 1rem;
+    height: 100%;
+    border: 1px solid black;
 }
