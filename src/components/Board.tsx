@@ -8,8 +8,8 @@ interface BoardProps {
     disabled: Boolean;
 }
 
-const Board: FC<BoardProps> = ({ playerPositions }) => (
-    <div className="board">
+const Board: FC<BoardProps> = ({ playerPositions, disabled = false }) => (
+    <div className={"board" + (disabled ? " disabled" : "")}>
         {Array(6)
             .fill(null)
             .map((_, row) => (
@@ -18,7 +18,7 @@ const Board: FC<BoardProps> = ({ playerPositions }) => (
                         .fill(null)
                         .map((i, column) => (
                             <span className="column" key={column}>
-                                <Tile {...{ row, column }} />
+                                <Tile {...{ row, column }} {...{ disabled }} />
                             </span>
                         ))}
                 </div>

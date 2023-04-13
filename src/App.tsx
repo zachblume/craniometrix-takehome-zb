@@ -94,6 +94,7 @@ export default function App() {
                         <Board playerPositions={playerPositions} disabled={disabled} />
                         {isGameOver && (
                             <div className="game-over">
+                                {winner && <h2>{winner} won!</h2>}
                                 <Button
                                     label="Restart game"
                                     onClick={() => {

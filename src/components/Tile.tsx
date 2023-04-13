@@ -2,8 +2,17 @@ import React, { FC, useContext } from "react";
 
 import { MutateBoardContext, BoardContext, WhoseTurnContext } from "../App";
 import hash2DPositionTo1d from "../lib/hash2DPositionTo1d";
+import unHashPosition from "../lib/unHashPosition";
 
-const Tile: FC<Position> = ({ row, column }) => {
+const Tile = ({
+    row,
+    column,
+    disabled = false,
+}: {
+    row: number;
+    column: number;
+    disabled: Boolean;
+}) => {
     const MutateBoard = useContext(MutateBoardContext);
     const Board = useContext(BoardContext);
     const whoseTurn = useContext(WhoseTurnContext);
@@ -16,21 +25,38 @@ const Tile: FC<Position> = ({ row, column }) => {
         }
     }
 
+    // calculations for click handling
+    const combinedPositions = Object.values(Board).reduce(
+        (acc, playerPositions) => ({ ...acc, ...playerPositions }),
+        {}
+    );
+    console.log(Object.keys(combinedPositions));
+    // lowest filled row in this column
+    const rowsInThisColumn = Object.keys(combinedPositions)
+        .map(unHashPosition)
+        .filter((position: Position) => position.column === column)
+        .map((position: Position) => position.row)
+        .sort((a: number, b: number) => b - a);
+    const columnIsFull = rowsInThisColumn.length === 6;
+    const nextRowToFill = 5 - rowsInThisColumn?.length;
+
     return (
         <span
             className={"tile " + who}
             onClick={() => {
-                // If it's occupied, do nothing
-                if (who) return;
+                if (disabled) return;
+
+                // If every row in this column is occupied, do nothing
+                if (columnIsFull) return;
 
                 MutateBoard({
                     actionType: "add",
                     player: whoseTurn,
-                    position: { row, column },
+                    position: { row: nextRowToFill, column },
                 });
             }}
         >
-            <span className="tile-inner">{who || "d "}</span>
+            <span className="tile-inner">{rowsInThisColumn?.length}</span>
         </span>
     );
 };

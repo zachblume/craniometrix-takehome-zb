@@ -19,13 +19,6 @@ body {
     position: relative;
 }
 
-.player1 {
-    background: red;
-}
-.player2 {
-    background: yellow;
-}
-
 span {
     display: block;
 }
@@ -44,4 +37,14 @@ span {
     flex: auto;
     display: flex;
     justify-content: center;
+}
+
+.disabled > * > * {
+    background: grey;
+}
+.player1 {
+    background: red;
+}
+.player2 {
+    background: yellow;
 }

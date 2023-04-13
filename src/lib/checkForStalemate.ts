@@ -1,7 +1,7 @@
 const checkForStalemate = (playerPositions: Players): Boolean => {
     let count = 0;
     for (let player of Object.values(playerPositions)) {
-        count += player.length;
+        count += Object.keys(player).length;
     }
     return count === 42;
 };
