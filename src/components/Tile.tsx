@@ -1,9 +1,9 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect } from "react";
 
 import { MutateBoardContext, BoardContext, WhoseTurnContext } from "../App";
 import hash2DPositionTo1d from "../lib/hash2DPositionTo1d";
 import unHashPosition from "../lib/unHashPosition";
-import { motion } from "framer-motion";
+import { motion, useAnimate } from "framer-motion";
 
 const Tile = ({
     row,
@@ -41,8 +41,19 @@ const Tile = ({
     const columnIsFull = rowsInThisColumn.length === 6;
     const nextRowToFill = 5 - rowsInThisColumn?.length;
 
+    const [scope, animate] = useAnimate();
+    useEffect(() => {
+        if (!who) return () => {};
+        const animation = async () => {
+            await animate(scope.current, { y: "-500%" }, { duration: 0.0001 });
+            await animate(scope.current, { y: "0%" }, { duration: 0.5 });
+        };
+        animation();
+    }, [who]);
+
     return (
-        <motion.span
+        <span
+            ref={scope}
             className={"tile " + who}
             onClick={() => {
                 if (disabled) return;
@@ -58,7 +69,7 @@ const Tile = ({
             }}
         >
             <span className="tile-inner"></span>
-        </motion.span>
+        </span>
     );
 };
 
