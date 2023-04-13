@@ -1,8 +1,11 @@
 /// <reference types="react-scripts" />
-// Players is an object with string keys and Positions value type
+
 type Players = {
-    [key: string]: Positions;
+    [key: string]: HashOfPositions;
 };
+// HashOfPositions is an array of booleans
+type HashOfPositions = Boolean[];
+
 // positions is an array of Position type
 type Positions = Position[];
 type Position = {
