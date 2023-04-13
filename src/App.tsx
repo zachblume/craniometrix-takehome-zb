@@ -99,7 +99,7 @@ export default function App() {
                             <div className="game-over">
                                 {winner && <h2 className={winner.toString()}>{winner} won!</h2>}
                                 <Button
-                                    label="Restart game"
+                                    label="Restart game!"
                                     onClick={() => {
                                         mutatePositions({
                                             actionType: "clear",
