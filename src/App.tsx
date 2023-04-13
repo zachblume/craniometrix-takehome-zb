@@ -116,8 +116,10 @@ export default function App() {
 
 const StateDisplay = () => {
     const Board = useContext(BoardContext);
+    const whoseTurn = useContext(WhoseTurnContext);
     return (
         <div className="StateDisplay" style={{ width: "100%" }}>
+            <h2>It's {whoseTurn}'s turn now!</h2>
             <h2>Current State</h2>
             {JSON.stringify(Board, null, 2)}
         </div>

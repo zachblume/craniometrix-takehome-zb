@@ -9,7 +9,7 @@ const Tile: FC<Position> = ({ row, column }) => {
     const whoseTurn = useContext(WhoseTurnContext);
 
     // Figure out who is in this tile
-    var who = "";
+    var who: string | null = null;
     for (let [playerName, playerPositions] of Object.entries(Board)) {
         if (playerPositions[hash2DPositionTo1d({ row, column })] === true) {
             who = playerName;
@@ -18,8 +18,11 @@ const Tile: FC<Position> = ({ row, column }) => {
 
     return (
         <span
-            className={"tile " + row}
+            className={"tile " + who}
             onClick={() => {
+                // If it's occupied, do nothing
+                if (who) return;
+
                 MutateBoard({
                     actionType: "add",
                     player: whoseTurn,
@@ -27,9 +30,7 @@ const Tile: FC<Position> = ({ row, column }) => {
                 });
             }}
         >
-            <span className="tile-inner">
-                ({row},{column},{who})
-            </span>
+            <span className="tile-inner">{who || " "}</span>
         </span>
     );
 };
