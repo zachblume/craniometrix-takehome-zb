@@ -22,7 +22,7 @@
 
 import "./styles.css";
 
-import { useReducer, createContext, useContext } from "react";
+import { useReducer, createContext, useContext, useState } from "react";
 
 // Components
 import Board from "./components/Board";
@@ -39,31 +39,38 @@ const emptyBoardState = {
     player2: [],
 };
 
-// assign the type of Players to BoardContextType
+// Contexts and their types
 type BoardContextType = Players | Function;
-// assign the type of DispatchAction to MutateBoardContextType
 type MutateBoardContextType = React.Dispatch<DispatchAction> | Function;
 export const BoardContext = createContext<BoardContextType>(() => {});
 export const MutateBoardContext = createContext<MutateBoardContextType>(() => {});
+export const WhoseTurnContext = createContext<string>("player1");
 
 import hash2DPositionTo1d from "./lib/hash2DPositionTo1d";
 
 const deepCopy = (obj: any): any => JSON.parse(JSON.stringify(obj));
 
-const reducerForPlayerPositions = (state: Players, action: DispatchAction) => {
-    switch (action.actionType) {
-        case "add":
-            const newState = { ...state };
-            newState[action.player][hash2DPositionTo1d(action.position)] = true;
-            return newState;
-        case "clear":
-            return deepCopy(emptyBoardState);
-    }
+const reducerForPlayerPositions = (switchPlayer: Function) => {
+    return (state: Players, action: DispatchAction) => {
+        switch (action.actionType) {
+            case "add":
+                switchPlayer();
+                const newState = { ...state };
+                newState[action.player][hash2DPositionTo1d(action.position)] = true;
+                return newState;
+            case "clear":
+                return deepCopy(emptyBoardState);
+        }
+    };
 };
 
 export default function App() {
+    const [whoseTurn, switchPlayer] = useReducer(
+        (state: string) => (state === "player1" ? "player2" : "player1"),
+        "player1"
+    );
     const [playerPositions, mutatePositions] = useReducer(
-        reducerForPlayerPositions,
+        reducerForPlayerPositions(switchPlayer),
         deepCopy(emptyBoardState)
     );
 
@@ -83,22 +90,24 @@ export default function App() {
             <h1>Connect 4</h1>
             <BoardContext.Provider value={playerPositions}>
                 <MutateBoardContext.Provider value={mutatePositions}>
-                    <Board playerPositions={playerPositions} disabled={disabled} />
-                    {isGameOver && (
-                        <div className="game-over">
-                            <Button
-                                label="Restart game"
-                                onClick={() => {
-                                    mutatePositions({
-                                        actionType: "clear",
-                                        player: "",
-                                        position: { row: 0, column: 0 },
-                                    });
-                                }}
-                            />
-                        </div>
-                    )}
-                    <StateDisplay />
+                    <WhoseTurnContext.Provider value={whoseTurn}>
+                        <Board playerPositions={playerPositions} disabled={disabled} />
+                        {isGameOver && (
+                            <div className="game-over">
+                                <Button
+                                    label="Restart game"
+                                    onClick={() => {
+                                        mutatePositions({
+                                            actionType: "clear",
+                                            player: "",
+                                            position: { row: 0, column: 0 },
+                                        });
+                                    }}
+                                />
+                            </div>
+                        )}
+                        <StateDisplay />
+                    </WhoseTurnContext.Provider>
                 </MutateBoardContext.Provider>
             </BoardContext.Provider>
         </div>
@@ -107,7 +116,6 @@ export default function App() {
 
 const StateDisplay = () => {
     const Board = useContext(BoardContext);
-    // return <div>History</div>;
     return (
         <div className="StateDisplay" style={{ width: "100%" }}>
             <h2>Current State</h2>
