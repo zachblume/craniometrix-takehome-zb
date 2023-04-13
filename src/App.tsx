@@ -126,8 +126,10 @@ const WhoseTurnDisplay = () => {
             <h2>
                 It's
                 {Object.keys(Board).map((p) => (
-                    <span className={"player " + (p == whoseTurn ? p : "")}>{p}'s</span>
-                ))}
+                    <>
+                        <span className={"player " + (p == whoseTurn ? p : "")}>{p}'s</span>{" "}
+                    </>
+                ))}{" "}
                 turn now!
             </h2>
         </div>
