@@ -1,39 +1,24 @@
 /*
-  OK so I have an approach.
+  Here's my approach.
 
-  I'm going to use a global state to store the positions of the players;
-   instead of labeling players I'll let that be arbitrary.
+  I'm going to use a global object to store the position state of the players, with playerName as key.
+  Storing each player's state seperately abstracts away the complexity of 3 states as options:
+         ex. [no-one, p1, p2] as possible states
+  
+  Additionally, that lets us store things a little 'backwards' for faster lookups.
+  
+  Instead of storing the entire table state as values, we can use the position as a key in a hash table.
 
-  I'll use a reducer to mutate the global object state of the players positions,
-  and little helper operations:
+  I'll use a reducer to mutate the global object state of the players positions, and helpers:
    - check if there's a winner.
    - to check if there's a stalemate.
    - to check if the game is over.
 
   In the meantime that the initial UI is rendering, I'll calculate all the winning states
-  asynchronously and store them as a hash table.
+  asynchronously and store them as an array.
 
   To figure out if the each player is in a winning state, I'll check if the player's positions
-  are present in the winning state hash table.
-
-  I'm not exactly sure off the top of my head the approach for optimal time complexity in
-  running the state comparison of a position[] against the hash table.
-
-  Offhandedly, I remember someone using bit math for this type of hash comparison
-  by encoding enach binary TilePlaced or !TilePlaced as a 1 or 0 respectively
-  in a N bit number (42 in this case), and then running the comparison
-  using logical conjunction against each of the winning states
-  to see if the player's positions are present in the winning state hash table.
-
-  Obviously logical AND is a O(1) operation, I kind of just remember that, so I need to take
-  a minute to think about if there is a algorithmically efficient way of approaching that
-  that doesn't involve bit match haha.
-
-  OK so once I've done that, I'll do a pass to make sure my typescript is up to snuff
-  (obviously it will have to compile while I'm writing as well).
-
-  That's my plan.
-
+  are present in the winning state array (by iterating through the winning array).
 */
 
 import "./styles.css";
