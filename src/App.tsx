@@ -24,6 +24,8 @@ import "./styles.css";
 
 import { motion } from "framer-motion";
 
+import { Helmet } from "react-helmet";
+
 import { useReducer, createContext, useContext, useState } from "react";
 
 // Components

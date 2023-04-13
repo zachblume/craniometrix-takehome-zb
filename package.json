@@ -37,6 +37,7 @@
     ],
     "devDependencies": {
         "@playwright/test": "^1.32.3",
+        "@types/react-helmet": "^6.1.6",
         "jest": "^27.5.1"
     }
 }
