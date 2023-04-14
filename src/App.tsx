@@ -32,8 +32,7 @@ const returnBoardReducer =
             case "clear":
                 switchPlayer();
                 return newEmptyBoardState();
-            default: // Add:
-                
+            default: // Add
                 switchPlayer();
                 state[action.player][hash2DPositionTo1d(action.position)] = true;
                 return state;
