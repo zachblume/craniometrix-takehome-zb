@@ -1,9 +1,10 @@
 import "./styles.css";
-import { useReducer, createContext, useContext, Fragment } from "react";
+import { useReducer, createContext } from "react";
 
 // Components
 import Board from "./components/Board";
-import Button from "./components/Button";
+import WhoseTurnDisplay from "./components/WhoseTurnDisplay";
+import GameOver from "./components/GameOver";
 
 // Library
 import generateWinningStates from "./lib/generateWinningStates";
@@ -71,35 +72,3 @@ export default function App() {
         </div>
     );
 }
-
-const WhoseTurnDisplay = () => {
-    const Board = useContext(BoardContext);
-    const whoseTurn = useContext(WhoseTurnContext);
-    return (
-        <h2 className="WhoseTurnDisplay">
-            It's
-            {Object.keys(Board).map((p) => (
-                <Fragment key={p}>
-                    <span className={"player " + (p == whoseTurn ? p : "")}>{p}'s</span>{" "}
-                </Fragment>
-            ))}{" "}
-            turn now!
-        </h2>
-    );
-};
-
-const GameOver = ({ winner }: { winner: string | null | boolean }) => {
-    const mutatePositions = useContext(MutateBoardContext);
-
-    return (
-        <div className="game-over">
-            {winner && <h2 className={winner.toString()}>{winner} won!</h2>}
-            <Button
-                label="Restart game!"
-                onClick={() => {
-                    mutatePositions("clear");
-                }}
-            />
-        </div>
-    );
-};

@@ -1,16 +1,13 @@
-import React, { FC, useEffect } from "react";
-
-import hash2DPositionTo1d from "../lib/hash2DPositionTo1d";
+import { FC, useEffect } from "react";
 import Tile from "./Tile";
-import { motion, useAnimate } from "framer-motion";
-
+import { useAnimate } from "framer-motion";
 interface BoardProps {
     board: BoardType;
     disabled: Boolean;
 }
 
 const Board: FC<BoardProps> = ({ board, disabled = false }) => {
-    // use useanimate to shake the board when it's cleared to zero
+    // use useAnimate from framer motion to shake the board when it's cleared to zero
     const [scope, animate] = useAnimate();
     useEffect(() => {
         if (board?.player1?.length || board?.player2?.length) return;

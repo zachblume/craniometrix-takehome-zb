@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { FC, useContext, useEffect } from "react";
 import { MutateBoardContext, BoardContext, WhoseTurnContext } from "../App";
 import { useAnimate } from "framer-motion";
 import hash2DPositionTo1d from "../lib/hash2DPositionTo1d";
@@ -8,7 +8,7 @@ type TileProps = {
     disabled: Boolean;
 } & Position;
 
-const Tile = ({ row, column, disabled = false }: TileProps) => {
+const Tile: FC<TileProps> = ({ row, column, disabled = false }) => {
     const MutateBoard = useContext(MutateBoardContext);
     const Board = useContext(BoardContext);
     const whoseTurn = useContext(WhoseTurnContext);
