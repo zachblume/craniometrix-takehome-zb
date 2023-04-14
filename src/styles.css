@@ -50,8 +50,8 @@ body {
 .tile {
     height: 12vw;
     width: 12vw;
-    max-width: 4.5rem;
-    max-height: 4.5rem;
+    max-width: 4rem;
+    max-height: 4rem;
     display: block;
     font-size: 1rem;
     border: 0px solid #eee;
