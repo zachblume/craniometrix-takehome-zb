@@ -5,21 +5,21 @@ import Tile from "./Tile";
 import { motion, useAnimate } from "framer-motion";
 
 interface BoardProps {
-    playerPositions: Players;
+    board: BoardType;
     disabled: Boolean;
 }
 
-const Board: FC<BoardProps> = ({ playerPositions, disabled = false }) => {
+const Board: FC<BoardProps> = ({ board, disabled = false }) => {
     // use useanimate to shake the board when it's cleared to zero
     const [scope, animate] = useAnimate();
     useEffect(() => {
-        if (playerPositions?.player1?.length || playerPositions?.player2?.length) return;
+        if (board?.player1?.length || board?.player2?.length) return;
         const animation = async () => {
             await animate(scope.current, { scale: 2 }, { duration: 0.3 });
             await animate(scope.current, { scale: 1 }, { duration: 0.3 });
         };
         animation();
-    }, [playerPositions?.player1?.length, playerPositions?.player2?.length]);
+    }, [board?.player1?.length, board?.player2?.length]);
 
     return (
         <div ref={scope} className={"board" + (disabled ? " disabled" : "")}>

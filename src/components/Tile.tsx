@@ -1,9 +1,8 @@
-import React, { FC, useContext, useEffect } from "react";
-
+import { useContext, useEffect } from "react";
 import { MutateBoardContext, BoardContext, WhoseTurnContext } from "../App";
+import { useAnimate } from "framer-motion";
 import hash2DPositionTo1d from "../lib/hash2DPositionTo1d";
 import unHashPosition from "../lib/unHashPosition";
-import { motion, useAnimate } from "framer-motion";
 
 type TileProps = {
     disabled: Boolean;
@@ -16,14 +15,16 @@ const Tile = ({ row, column, disabled = false }: TileProps) => {
 
     // Who has already placed this tile?
     var who: string | null = null;
-    for (let [playerName, playerPositions] of Object.entries(Board)) {
-        if (playerPositions[hash2DPositionTo1d({ row, column })] === true) who = playerName;
+    for (let [playerName, thisPlayersPositions] of Object.entries(Board)) {
+        if (thisPlayersPositions[hash2DPositionTo1d({ row, column })] === true) who = playerName;
     }
 
     // Loop through each player and each of their positions, and see if any of them are in this column
+    // This logic needs to be here, NOT in the action dispatcher, because idempotency in react strict mode
+    // depends on the reducer being pure.
     let rowsInThisColumn = 0;
-    for (let [playerName, playerPositions] of Object.entries(Board)) {
-        for (let positionHash of Object.keys(playerPositions)) {
+    for (let [playerName, thisPlayersPositions] of Object.entries(Board)) {
+        for (let positionHash of Object.keys(thisPlayersPositions)) {
             if (unHashPosition(positionHash).column === column) rowsInThisColumn++;
         }
     }

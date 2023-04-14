@@ -16,7 +16,7 @@ const winningStates = generateWinningStates();
 const newEmptyBoardState = () => ({ player1: [], player2: [] });
 
 // Instead of prop drilling, we're going to use context to pass down to the tile
-type BoardContextType = Players | Function;
+type BoardContextType = BoardType | Function;
 type MutateBoardContextType = React.Dispatch<DispatchAction> | Function;
 type WhoseTurnContextType = string;
 export const BoardContext = createContext<BoardContextType>(() => {});
@@ -26,18 +26,19 @@ export const WhoseTurnContext = createContext<WhoseTurnContextType>("player1");
 // !! This reducer is a function that returns a function !! We love Functional.
 // This is so we can pass in the switchPlayer function to the reducer from inside the component.
 // Since switchPlayer is itself a reducer, the lack of re-rendering the function is fine.
-const returnBoardReducer = (switchPlayer: Function) => (state: Players, action: DispatchAction) => {
-    switch (action) {
-        case "clear":
-            switchPlayer();
-            return newEmptyBoardState();
-        default:
-            switchPlayer();
-
-            state[action.player][hash2DPositionTo1d(action.position)] = true;
-            return state;
-    }
-};
+const returnBoardReducer =
+    (switchPlayer: Function) => (state: BoardType, action: DispatchAction) => {
+        switch (action) {
+            case "clear":
+                switchPlayer();
+                return newEmptyBoardState();
+            default: // Add:
+                
+                switchPlayer();
+                state[action.player][hash2DPositionTo1d(action.position)] = true;
+                return state;
+        }
+    };
 
 // The main app component
 export default function App() {
@@ -45,25 +46,25 @@ export default function App() {
         (state: string) => (state === "player1" ? "player2" : "player1"),
         "player1"
     );
-    const [playerPositions, mutatePositions] = useReducer(
+    const [board, mutatePositions] = useReducer(
         returnBoardReducer(switchPlayer),
         newEmptyBoardState()
     );
     const winner = whosTheWinner({
-        playerPositions,
+        board,
         winningStates,
     });
-    const isStalemate = checkForStalemate(playerPositions);
+    const isStalemate = checkForStalemate(board);
     const isGameOver = winner || isStalemate;
     const disabled = !!isGameOver;
 
     return (
         <div className="App">
             <h1>Connect 4</h1>
-            <BoardContext.Provider value={playerPositions}>
+            <BoardContext.Provider value={board}>
                 <MutateBoardContext.Provider value={mutatePositions}>
                     <WhoseTurnContext.Provider value={whoseTurn}>
-                        <Board playerPositions={playerPositions} disabled={disabled} />
+                        <Board board={board} disabled={disabled} />
                         {isGameOver ? <GameOver winner={winner} /> : <WhoseTurnDisplay />}
                     </WhoseTurnContext.Provider>
                 </MutateBoardContext.Provider>

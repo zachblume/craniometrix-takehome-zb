@@ -1,6 +1,4 @@
 const unHashPosition = (num: number | string): Position => {
-    const row = Math.floor(Number(num) / 10);
-    const column = Number(num) % 10;
-    return { row, column };
+    return { row: Math.floor(Number(num) / 10), column: Number(num) % 10 };
 };
 export default unHashPosition;

@@ -1,13 +1,11 @@
 import isWinner from "./isWinner";
-const whosTheWinner = ({
-    playerPositions,
-    winningStates,
-}: {
-    playerPositions: Players;
+type whosTheWinnerProps = {
+    board: BoardType;
     winningStates: Positions[];
-}): string | boolean => {
-    for (let [playerName, playerState] of Object.entries(playerPositions)) {
-        if (isWinner(playerState, winningStates)) return playerName;
+};
+const whosTheWinner = ({ board, winningStates }: whosTheWinnerProps): string | boolean => {
+    for (let playerName in board) {
+        if (isWinner(board[playerName], winningStates)) return playerName;
     }
     return false;
 };

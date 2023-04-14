@@ -1,6 +1,4 @@
-// isWinnerProps type
 import hash2DPositionTo1d from "./hash2DPositionTo1d";
-
 const isWinner = (stateOfPositionsToCheckForWin: HashOfPositions, winningStates: Positions[]) => {
     for (let winningState of winningStates) {
         let allConditionsMet = true;
