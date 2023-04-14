@@ -6,14 +6,26 @@
 
 ### To run the application
 
-Go to https://craniometrix-takehome-zb.vercel.app/ to see a production version.
+Go to https://craniometrix-takehome-zb.vercel.app to see a production version. _Check it out on a mobile phone, too!_
 
-Run locally (using the CRA dev server):
+**Run locally (using the CRA dev server):**
 
 ```
 git clone https://github.com/zachblume/craniometrix-takehome-zb.git
 cd craniometrix-takehome-zb
 npm run start
+```
+
+**Run unit tests (with Jest):**
+
+```
+npm run test
+```
+
+**Run end to end tests (with Playwright):**
+
+```
+npm run test:e2e
 ```
 
 ### Here's my React approach:

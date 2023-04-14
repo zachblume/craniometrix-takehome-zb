@@ -25,6 +25,7 @@
         "dev": "react-scripts start",
         "build": "react-scripts build",
         "test": "jest",
+        "test:e2e": "playwright test",
         "eject": "react-scripts eject",
         "format": "prettier --write ."
     },
