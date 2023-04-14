@@ -10,11 +10,17 @@ Go to https://craniometrix-takehome-zb.vercel.app to see a production version. _
 
 **Run locally (using the CRA dev server):**
 
+You need Node >=16. I tested on Node@latest aka v19.4.0, as well as Gallium LTS aka v16.
+
+Open a terminal and run:
+
 ```
 git clone https://github.com/zachblume/craniometrix-takehome-zb.git
 cd craniometrix-takehome-zb
 npm run start
 ```
+
+And your browser will open to https://localhost:3000 and you'll see the app!
 
 **Run unit tests (with Jest):**
 
@@ -22,14 +28,19 @@ npm run start
 npm run test
 ```
 
+Output is in the terminal.
+
 **Run end to end tests (with Playwright):**
 
 ```
 npm run test:e2e
 ```
 
-### Here's my React approach:
+Output is in the terminal.
 
+### Here's my React approach/notes:
+
+-   I usually opt for Next.js over Create React App (it is now officially recommended by the React team in the React documentation to NOT use CRA and to instead use a newer framework). However, since the starter code used it, I decided to not switch anything to show flexibility!
 -   I forgot how connect 4 works until being 80% done and remembering that columns matter more than rows. Awkward! I might have done this differently if I had thought of that :)
 -   I **lifted state up** from tile to a global board state
 -   I **used reducers** instead of useState for dispatch simplicity
@@ -43,7 +54,7 @@ npm run test:e2e
     -   if you simply switched the "current player name" in-place without movement, it was hard to notice. So I opted to _always_ show both names and create some visual movement and color to signify turn-changing.
     -   I added a subtle background highlight on hover of each tile, so you could "feel" a little more interactivity'
 
-### Here's my algorithmic approach:
+### Here's my algorithmic approach/notes:
 
 -   Instead of algorithmically solving this game (the optimal time complexity solution is actually fairly complicated, to use the right data structure to solve this incrementally and not re-do work each move), **I pre-calculate an array of all the winning states (168)**.
 -   Instead of the naive approach of storing a global state with an array of arrays and three states (nothing, player1, player2), **I store each players state seperately inside a global array of players (const board) as an array where the position is the key and the presence of a tile for that player is a Boolean, so board[playerName][position]=true|undefined;**
