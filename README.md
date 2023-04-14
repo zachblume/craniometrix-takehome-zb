@@ -17,7 +17,7 @@ Open a terminal and run:
 ```
 git clone https://github.com/zachblume/craniometrix-takehome-zb.git
 cd craniometrix-takehome-zb
-npm run install
+npm install
 npm run start
 ```
 
