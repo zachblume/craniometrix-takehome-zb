@@ -28,7 +28,43 @@ And your browser will open to https://localhost:3000 and you'll see the app!
 npm run test
 ```
 
-Output is in the terminal.
+Output is in the terminal. You should get:
+
+```
+zachblume@home craniometrix-takehome-zb % npm run test
+
+> craniometrix-zach-takehome@1.0.0 test
+> jest
+
+ PASS  __tests__/unit.spec.ts
+  generateWinningStates()
+    ✓ generates 168 winning states (2 ms)
+    ✓ states that are well-formed (63 ms)
+  hash2dPositionTo1d()
+    ✓ basic test
+  unHashPosition()
+    ✓ basic test (1 ms)
+  isWinner()
+    ✓ empty board state returns false (no winner)
+    ✓ 4 in a row horizontal
+    ✓ 4 in a row vertical
+    ✓ 4 in a row diagonal leaning up-right
+    ✓ 4 in a row diagonal leaning down-right (1 ms)
+  whosTheWinner()
+    ✓ empty board state returns false (no winner)
+    ✓ player 2 has 4 in a row horizontal
+  checkForStalemate()
+    ✓ empty board state returns false (no stalemate) (1 ms)
+    ✓ board state with 1 move returns false (no stalemate)
+    ✓ board state with 41 moves returns false (no stalemate)
+    ✓ board state with 42 moves returns true (stalemate) (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.572 s, estimated 1 s
+Ran all test suites.
+```
 
 **Run end to end tests (with Playwright):**
 
@@ -37,6 +73,18 @@ npm run test:e2e
 ```
 
 Output is in the terminal.
+
+You should get:
+
+```
+zachblume@home craniometrix-takehome-zb % npm run test:e2e
+
+> craniometrix-zach-takehome@1.0.0 test:e2e
+> playwright test
+
+Running 10 tests using 4 workers
+  10 passed (16.7s)
+```
 
 ### Here's my React approach/notes:
 
