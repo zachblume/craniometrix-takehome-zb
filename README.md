@@ -4,7 +4,11 @@
 
 ## Zach Blume
 
-Here's my React approach:
+### To run the application
+
+Go to 
+
+### Here's my React approach:
 
 -   I forgot how connect 4 works until being 80% done and remembering that columns matter more than rows. Awkward! I might have done this differently if I had thought of that :)
 -   I **lifted state up** from tile to a global board state
@@ -14,8 +18,12 @@ Here's my React approach:
 -   I **used Framer Motion for some cute animations** on initialization/reset and the tile dropping down.
 -   I **optimized for mobile display** with css adjustments
 -   I **opted to use raw CSS instead of my normal Tailwind usage**, because I figured it would help you see I can write CSS.
+-   On the design front, this is not my most beloved design style. However, as someone who is not accustomed to designing games, I decided to try and **stretch and show some flexibility**. I decided that (1) bold color, (2) fidelity to the original connect 4 colors were the most important things. **Lastly I decided to add a single flair: the impactful classic game font used in the header (imported from Google fonts).**
+-   The last two UI decisions I made were:
+    -   if you simply switched the "current player name" in-place without movement, it was hard to notice. So I opted to _always_ show both names and create some visual movement and color to signify turn-changing.
+    -   I added a subtle background highlight on hover of each tile, so you could "feel" a little more interactivity'
 
-Here's my algorithmic approach:
+### Here's my algorithmic approach:
 
 -   Instead of algorithmically solving this game (the optimal time complexity solution is actually fairly complicated, to use the right data structure to solve this incrementally and not re-do work each move), **I pre-calculate an array of all the winning states (168)**.
 -   Instead of the naive approach of storing a global state with an array of arrays and three states (nothing, player1, player2), **I store each players state seperately inside a global array of players (const board) as an array where the position is the key and the presence of a tile for that player is a Boolean, so board[playerName][position]=true|undefined;**
