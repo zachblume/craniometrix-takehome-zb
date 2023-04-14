@@ -5,71 +5,56 @@ import hash2DPositionTo1d from "../lib/hash2DPositionTo1d";
 import unHashPosition from "../lib/unHashPosition";
 import { motion, useAnimate } from "framer-motion";
 
-const Tile = ({
-    row,
-    column,
-    disabled = false,
-}: {
-    row: number;
-    column: number;
+type TileProps = {
     disabled: Boolean;
-}) => {
+} & Position;
+
+const Tile = ({ row, column, disabled = false }: TileProps) => {
     const MutateBoard = useContext(MutateBoardContext);
     const Board = useContext(BoardContext);
     const whoseTurn = useContext(WhoseTurnContext);
 
-    // Figure out who is in this tile
+    // Who has already placed this tile?
     var who: string | null = null;
     for (let [playerName, playerPositions] of Object.entries(Board)) {
-        if (playerPositions[hash2DPositionTo1d({ row, column })] === true) {
-            who = playerName;
-        }
+        if (playerPositions[hash2DPositionTo1d({ row, column })] === true) who = playerName;
     }
 
-    // calculations for click handling
-    const combinedPositions = Object.values(Board).reduce(
-        (acc, playerPositions) => ({ ...acc, ...playerPositions }),
-        {}
-    );
-    console.log(Object.keys(combinedPositions));
-    // lowest filled row in this column
-    const rowsInThisColumn = Object.keys(combinedPositions)
-        .map(unHashPosition)
-        .filter((position: Position) => position.column === column)
-        .map((position: Position) => position.row)
-        .sort((a: number, b: number) => b - a);
-    const columnIsFull = rowsInThisColumn.length === 6;
-    const nextRowToFill = 5 - rowsInThisColumn?.length;
+    // Loop through each player and each of their positions, and see if any of them are in this column
+    let rowsInThisColumn = 0;
+    for (let [playerName, playerPositions] of Object.entries(Board)) {
+        for (let positionHash of Object.keys(playerPositions)) {
+            if (unHashPosition(positionHash).column === column) rowsInThisColumn++;
+        }
+    }
+    const columnIsFull = rowsInThisColumn === 6;
+    const nextRowToFill = 5 - rowsInThisColumn;
 
-    const [scope, animate] = useAnimate();
+    // Animate the dropping tile
+    const [tileRef, animate] = useAnimate();
     useEffect(() => {
-        if (!who) return () => {};
+        if (!who) return;
         const animation = async () => {
-            await animate(scope.current, { y: "-500%" }, { duration: 0.0001 });
-            await animate(scope.current, { y: "0%" }, { duration: 0.5 });
+            await animate(tileRef.current, { y: "-500%" }, { duration: 0.0001 });
+            await animate(tileRef.current, { y: "0%" }, { duration: 0.5 });
         };
         animation();
     }, [who]);
 
     return (
         <span
-            ref={scope}
+            ref={tileRef}
             className={"tile " + who}
             onClick={() => {
                 if (disabled) return;
-
-                // If every row in this column is occupied, do nothing
                 if (columnIsFull) return;
-
                 MutateBoard({
                     actionType: "add",
                     player: whoseTurn,
                     position: { row: nextRowToFill, column },
                 });
             }}
-        >
-            <span className="tile-inner"></span>
-        </span>
+        />
     );
 };
 

@@ -1,7 +1,5 @@
 import "./styles.css";
-
-import { motion } from "framer-motion";
-import { useReducer, createContext, useContext, useState } from "react";
+import { useReducer, createContext, useContext, Fragment } from "react";
 
 // Components
 import Board from "./components/Board";
@@ -11,49 +9,46 @@ import Button from "./components/Button";
 import generateWinningStates from "./lib/generateWinningStates";
 import whosTheWinner from "./lib/whosTheWinner";
 import checkForStalemate from "./lib/checkForStalemate";
-
-const winningStates = generateWinningStates();
-const emptyBoardState = {
-    player1: [],
-    player2: [],
-};
-
-// Contexts and their types
-type BoardContextType = Players | Function;
-type MutateBoardContextType = React.Dispatch<DispatchAction> | Function;
-export const BoardContext = createContext<BoardContextType>(() => {});
-export const MutateBoardContext = createContext<MutateBoardContextType>(() => {});
-export const WhoseTurnContext = createContext<string>("player1");
-
 import hash2DPositionTo1d from "./lib/hash2DPositionTo1d";
 
-const deepCopy = (obj: any): any => JSON.parse(JSON.stringify(obj));
+// Initialize
+const winningStates = generateWinningStates();
+const newEmptyBoardState = () => ({ player1: [], player2: [] });
 
-const reducerForPlayerPositions = (switchPlayer: Function) => {
-    return (state: Players, action: DispatchAction) => {
-        switch (action.actionType) {
-            case "add":
-                switchPlayer();
-                const newState = { ...state };
-                newState[action.player][hash2DPositionTo1d(action.position)] = true;
-                return newState;
-            case "clear":
-                switchPlayer();
-                return deepCopy(emptyBoardState);
-        }
-    };
+// Instead of prop drilling, we're going to use context to pass down to the tile
+type BoardContextType = Players | Function;
+type MutateBoardContextType = React.Dispatch<DispatchAction> | Function;
+type WhoseTurnContextType = string;
+export const BoardContext = createContext<BoardContextType>(() => {});
+export const MutateBoardContext = createContext<MutateBoardContextType>(() => {});
+export const WhoseTurnContext = createContext<WhoseTurnContextType>("player1");
+
+// !! This reducer is a function that returns a function !! We love Functional.
+// This is so we can pass in the switchPlayer function to the reducer from inside the component.
+// Since switchPlayer is itself a reducer, the lack of re-rendering the function is fine.
+const returnBoardReducer = (switchPlayer: Function) => (state: Players, action: DispatchAction) => {
+    switch (action) {
+        case "clear":
+            switchPlayer();
+            return newEmptyBoardState();
+        default:
+            switchPlayer();
+
+            state[action.player][hash2DPositionTo1d(action.position)] = true;
+            return state;
+    }
 };
 
+// The main app component
 export default function App() {
     const [whoseTurn, switchPlayer] = useReducer(
         (state: string) => (state === "player1" ? "player2" : "player1"),
         "player1"
     );
     const [playerPositions, mutatePositions] = useReducer(
-        reducerForPlayerPositions(switchPlayer),
-        deepCopy(emptyBoardState)
+        returnBoardReducer(switchPlayer),
+        newEmptyBoardState()
     );
-
     const winner = whosTheWinner({
         playerPositions,
         winningStates,
@@ -62,9 +57,6 @@ export default function App() {
     const isGameOver = winner || isStalemate;
     const disabled = !!isGameOver;
 
-    // Export playerPositions, disabled, and mutatePositions as contexts
-    // to be used by the board and tile components:
-
     return (
         <div className="App">
             <h1>Connect 4</h1>
@@ -72,22 +64,7 @@ export default function App() {
                 <MutateBoardContext.Provider value={mutatePositions}>
                     <WhoseTurnContext.Provider value={whoseTurn}>
                         <Board playerPositions={playerPositions} disabled={disabled} />
-                        {isGameOver && (
-                            <div className="game-over">
-                                {winner && <h2 className={winner.toString()}>{winner} won!</h2>}
-                                <Button
-                                    label="Restart game!"
-                                    onClick={() => {
-                                        mutatePositions({
-                                            actionType: "clear",
-                                            player: "",
-                                            position: { row: 0, column: 0 },
-                                        });
-                                    }}
-                                />
-                            </div>
-                        )}
-                        {!isGameOver && <WhoseTurnDisplay />}
+                        {isGameOver ? <GameOver winner={winner} /> : <WhoseTurnDisplay />}
                     </WhoseTurnContext.Provider>
                 </MutateBoardContext.Provider>
             </BoardContext.Provider>
@@ -99,16 +76,30 @@ const WhoseTurnDisplay = () => {
     const Board = useContext(BoardContext);
     const whoseTurn = useContext(WhoseTurnContext);
     return (
-        <div className="WhoseTurnDisplay">
-            <h2>
-                It's
-                {Object.keys(Board).map((p) => (
-                    <>
-                        <span className={"player " + (p == whoseTurn ? p : "")}>{p}'s</span>{" "}
-                    </>
-                ))}{" "}
-                turn now!
-            </h2>
+        <h2 className="WhoseTurnDisplay">
+            It's
+            {Object.keys(Board).map((p) => (
+                <Fragment key={p}>
+                    <span className={"player " + (p == whoseTurn ? p : "")}>{p}'s</span>{" "}
+                </Fragment>
+            ))}{" "}
+            turn now!
+        </h2>
+    );
+};
+
+const GameOver = ({ winner }: { winner: string | null | boolean }) => {
+    const mutatePositions = useContext(MutateBoardContext);
+
+    return (
+        <div className="game-over">
+            {winner && <h2 className={winner.toString()}>{winner} won!</h2>}
+            <Button
+                label="Restart game!"
+                onClick={() => {
+                    mutatePositions("clear");
+                }}
+            />
         </div>
     );
 };

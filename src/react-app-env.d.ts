@@ -4,6 +4,7 @@
 type Players = {
     [key: string]: HashOfPositions;
 };
+// type Players = Record<string, HashOfPositions>;
 // HashOfPositions is an array of booleans
 type HashOfPositions = Boolean[];
 
@@ -15,8 +16,12 @@ type Position = {
 };
 
 // for reducer
-type DispatchAction = {
-    actionType: "add" | "clear";
-    player: string;
-    position: Position;
-};
+type DispatchAction =
+    | {
+          actionType: "add";
+          player: string;
+          position: Position;
+      }
+    | "clear";
+
+type string = "player1" | "player2";
