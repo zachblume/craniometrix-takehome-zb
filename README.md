@@ -1,8 +1,6 @@
-# "Connect 4"
+# Connect 4!
 
-## Craniometrix Takehome
-
-## Zach Blume
+## Craniometrix Takehome, Zach Blume
 
 ### To run the application
 
